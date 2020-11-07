@@ -8,33 +8,36 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-<p>This is my page</p>
 
 <script>
     function submitGen() {
-        $.ajax({
-            type: "GET",
-            data:$('#genForm').serialize(),
-            url: "draw/"
-        })
+        url = "draw/?" + $('#genForm').serialize();
+        $("#mosaic_img").attr('src', url)
     }
 
 </script>
 
-<form id="genForm" action="{% url 'mosaic:draw' %}">
-    <!--{% csrf_token %}-->
+<form id="genForm">
+
     <label for="width">width</label>
-    <input type="number" name="width" id="width" min="5" max=256 value="64">
+    <input type="number" name="width" id="width" min="5" max=256 value="32">
 
     <label for="step">height</label>
-    <input type="number" name="height" id="height" min="5" max=256 value="64">
+    <input type="number" name="height" id="height" min="5" max=256 value="32">
 
     <br/>
     <label for="step">color number</label>
     <input type="number" name="step" id="step" min="4" max=10 value="5">
 
     <br/>
+    <label for="color">color theme</label>
+    <input type="color" name="color" id="color">
+
+    <br/>
     <input type="button" value="Generate"  onclick="return submitGen();">
+
+    <br/>
+    <img id="mosaic_img" src="{% url 'mosaic:draw' %}" alt=""/>
 </form>
 
 </body>

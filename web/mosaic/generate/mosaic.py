@@ -1,4 +1,5 @@
 from PIL import Image, ImageDraw
+from io import BytesIO
 from random import random
 from .img_convert import fit_pattern, grid_pattern
 from .color_convert import Lab2RGB, RGB2Lab
@@ -9,12 +10,16 @@ outline_color = None  # no outline
 colors = []
 
 
-def get_colors(step):
+def get_colors(step, color):
     colors.clear()
+    color = RGB2Lab(color)
+    a = color[1]
+    b = color[2]
+
     s = 100 / (step + 1)
     for i in range(step):
         l = int((i + 1) * s)
-        colors.append(Lab2RGB((l, -23, 54)))
+        colors.append(Lab2RGB((l, a, b)))
 
 
 def random_color_by_gray(g):
@@ -58,7 +63,10 @@ def drawMosaic(width_n, height_n, pattern_path=None, pixel=15):
     return image
 
 
-def mosaic(size, step, pixel=15):
-    get_colors(step)
-    drawMosaic(size[0], size[1]).save("mosaic.png")
+def mosaic(size, step, color, pixel=15):
+    get_colors(step, color)
+    # drawMosaic(size[0], size[1]).save("gen/mosaic#{}.png".format(id))
+    imgByteArr = BytesIO()
+    drawMosaic(size[0], size[1]).save(imgByteArr, format="PNG")
+    return imgByteArr.getvalue()
 

@@ -25,7 +25,7 @@ def grid_pattern(size):
         color = int(255 - i * step)
         draw.line((0, i, size[0], i), fill=color, width=1)
 
-    bg.save("pattern.jpg")
+    # bg.save("pattern.jpg")
     return bg.load()
 
 # grid_pattern((64, 64))
