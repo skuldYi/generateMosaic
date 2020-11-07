@@ -53,7 +53,7 @@ def RGB2Lab(pixel):
     """
     xyz = __rgb2xyz__(pixel)
     Lab = __xyz2lab__(xyz)
-    return Lab
+    return tuple(Lab)
 
 
 # endregion
@@ -87,4 +87,4 @@ def __xyz2rgb(xyz):
 def Lab2RGB(Lab):
     xyz = __lab2xyz__(Lab)
     rgb = __xyz2rgb(xyz)
-    return rgb
+    return tuple(rgb)

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>My test page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+            integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<p>This is my page</p>
+
+<script>
+    function submitGen() {
+        $.ajax({
+            type: "GET",
+            data:$('#genForm').serialize(),
+            url: "draw/"
+        })
+    }
+
+</script>
+
+<form id="genForm" action="{% url 'mosaic:draw' %}">
+    <!--{% csrf_token %}-->
+    <label for="width">width</label>
+    <input type="number" name="width" id="width" min="5" max=256 value="64">
+
+    <label for="step">height</label>
+    <input type="number" name="height" id="height" min="5" max=256 value="64">
+
+    <br/>
+    <label for="step">color number</label>
+    <input type="number" name="step" id="step" min="4" max=10 value="5">
+
+    <br/>
+    <input type="button" value="Generate"  onclick="return submitGen();">
+</form>
+
+</body>
+</html>
