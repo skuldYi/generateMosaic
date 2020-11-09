@@ -8,13 +8,12 @@ def paste_pos(bg, img):
     return (pos[0], pos[1])
 
 
-def fit_pattern(size, pattern):
-    bg = Image.new("L", size, 128)
-    with Image.open(pattern) as im:
-        im = im.convert("L")
-        im.thumbnail(bg.size)
-        bg.paste(im, paste_pos(bg.size, im.size))
-        return bg.load()
+def fit_pattern(size, im):
+    bg = Image.new("L", size, 255)
+    im = im.convert("L")
+    im.thumbnail(bg.size)
+    bg.paste(im, paste_pos(bg.size, im.size))
+    return bg.load()
 
 
 def grid_pattern(size):
