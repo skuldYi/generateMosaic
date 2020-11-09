@@ -1,44 +1,103 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
     <title>My test page</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-            integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
-            crossorigin="anonymous"></script>
-</head>
-<body>
+  </head>
+  <body>
+    <script>
+      function submitGen() {
+        let form = document.getElementById("genForm");
+        let formData = new FormData(form);
+        fetch("draw/", {
+          method: "POST",
+          body: formData,
+        })
+          .then(res => {
+            if (res.ok) {
+              return res.blob();
+            }
+            throw new Error("Network response was not ok.");
+          })
+          .then(blob => {
+            let img = document.getElementById("mosaic_img");
+            window.URL.revokeObjectURL(img.src);
+            img.src = window.URL.createObjectURL(blob);
+          });
+      }
+    </script>
 
-<script>
-    function submitGen() {
-        url = "draw/?" + $('#genForm').serialize();
-        $("#mosaic_img").attr('src', url)
-    }
+    <form id="genForm">
+      {% csrf_token %}
 
-</script>
+      <div style="float: left; margin-right: 30px">
+        <label for="width">width</label>
+        <input
+          type="number"
+          name="width"
+          id="width"
+          min="5"
+          max="256"
+          value="32"
+        />
 
-<form id="genForm">
+        <label for="step">height</label>
+        <input
+          type="number"
+          name="height"
+          id="height"
+          min="5"
+          max="256"
+          value="32"
+        />
 
-    <label for="width">width</label>
-    <input type="number" name="width" id="width" min="5" max=256 value="32">
+        <br />
+        <label for="step">color number</label>
+        <input type="number" name="step" id="step" min="4" max="10" value="5" />
 
-    <label for="step">height</label>
-    <input type="number" name="height" id="height" min="5" max=256 value="32">
+        <br />
+        <label for="color">color theme</label>
+        <input type="color" name="color" id="color" />
+        
+        <br />
+        <label for="line_width">outline weight</label>
+        <input
+          type="number"
+          name="line_width"
+          id="line_width"
+          min="0"
+          max="10"
+          value="0"
+        />
 
-    <br/>
-    <label for="step">color number</label>
-    <input type="number" name="step" id="step" min="4" max=10 value="5">
+        <br />
+        <label>outline color</label>
+        <input type="radio" id="white" name="line_color" value="#ffffff">
+        <label for="white">White</label>
+        <input type="radio" id="black" name="line_color" value="#000000">
+        <label for="black">Black</label>
+        
+        <br />
+        <label for="side">side length</label>
+        <input
+          type="number"
+          name="side"
+          id="side"
+          min="8"
+          max="50"
+          value="15"
+        />
+        <label>px</label>
 
-    <br/>
-    <label for="color">color theme</label>
-    <input type="color" name="color" id="color">
+        <br />
+        <label for="image">pattern</label>
+        <input type="file" accept="image/*" name="image" id="image" />
 
-    <br/>
-    <input type="button" value="Generate"  onclick="return submitGen();">
+        <br />
+        <input type="button" value="Generate" onclick="submitGen()" />
+      </div>
 
-    <br/>
-    <img id="mosaic_img" src="{% url 'mosaic:draw' %}" alt=""/>
-</form>
-
-</body>
+      <img id="mosaic_img" src="" />
+    </form>
+  </body>
 </html>
